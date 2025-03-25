@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Калькулятор теплоти згоряння</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        .container { width: 50%; margin: auto; text-align: center; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid black; padding: 10px; text-align: center; }
+        input { width: 80px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Веб-калькулятор розрахунку складу сухої та горючої маси</h2>
+        <table>
+            <tr>
+                <th>Компонент</th>
+                <th>Значення (%)</th>
+            </tr>
+            <tr><td>Hₚ</td><td><input type="number" id="H"></td></tr>
+            <tr><td>Cₚ</td><td><input type="number" id="C"></td></tr>
+            <tr><td>Sₚ</td><td><input type="number" id="S"></td></tr>
+            <tr><td>Nₚ</td><td><input type="number" id="N"></td></tr>
+            <tr><td>Oₚ</td><td><input type="number" id="O"></td></tr>
+            <tr><td>Wₚ</td><td><input type="number" id="W"></td></tr>
+            <tr><td>Aₚ</td><td><input type="number" id="A"></td></tr>
+        </table>
+        <button onclick="calculate()">Розрахувати</button>
+        <h3>Результати:</h3>
+        <p id="result"></p>
+    </div>
+
+    <script>
+        function calculate() {
+            let H = parseFloat(document.getElementById("H").value) || 0;
+            let C = parseFloat(document.getElementById("C").value) || 0;
+            let S = parseFloat(document.getElementById("S").value) || 0;
+            let N = parseFloat(document.getElementById("N").value) || 0;
+            let O = parseFloat(document.getElementById("O").value) || 0;
+            let W = parseFloat(document.getElementById("W").value) || 0;
+            let A = parseFloat(document.getElementById("A").value) || 0;
+            
+            let KRS = 100 / (100 - W);
+            let KRG = 100 / (100 - W - A);
+            
+            let HS = H * KRS;
+            let CS = C * KRS;
+            let SS = S * KRS;
+            let NS = N * KRS;
+            let OS = O * KRS;
+            let AS = A * KRS;
+            
+            let HG = H * KRG;
+            let CG = C * KRG;
+            let SG = S * KRG;
+            let NG = N * KRG;
+            let OG = O * KRG;
+            
+            let Qr = (339 * C) + (1030 * H) - (108.8 * (O - S)) - (25 * W);
+            
+            let resultText = `
+                <b>Коефіцієнти:</b><br>
+                KRS = ${KRS.toFixed(2)}, KRG = ${KRG.toFixed(2)}<br><br>
+                <b>Склад сухої маси:</b><br>
+                H = ${HS.toFixed(2)}%, C = ${CS.toFixed(2)}%, S = ${SS.toFixed(2)}%, N = ${NS.toFixed(2)}%, O = ${OS.toFixed(2)}%, A = ${AS.toFixed(2)}%<br><br>
+                <b>Склад горючої маси:</b><br>
+                H = ${HG.toFixed(2)}%, C = ${CG.toFixed(2)}%, S = ${SG.toFixed(2)}%, N = ${NG.toFixed(2)}%, O = ${OG.toFixed(2)}%<br><br>
+                <b>Нижча теплота згоряння:</b> ${Qr.toFixed(2)} МДж/кг
+            `;
+            
+            document.getElementById("result").innerHTML = resultText;
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Калькулятор мазуту</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        .container { max-width: 400px; margin: auto; padding: 40px; border: 1px solid #de1111; border-radius: 10px; }
+        input, button { width: 100%; padding: 10px; margin: 5px 0; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Калькулятор мазуту</h2>
+        <label>Вуглець (%)</label>
+        <input type="number" id="C_G" step="0.01">
+        <label>Водень (%)</label>
+        <input type="number" id="H_G" step="0.01">
+        <label>Кисень (%)</label>
+        <input type="number" id="O_G" step="0.01">
+        <label>Сірка (%)</label>
+        <input type="number" id="S_G" step="0.01">
+        <label>Нижча теплота згоряння (МДж/кг)</label>
+        <input type="number" id="Q_daf" step="0.01">
+        <label>Вологість робочої маси (%)</label>
+        <input type="number" id="W_P" step="0.01">
+        <label>Зольність сухої маси (%)</label>
+        <input type="number" id="A_P" step="0.01">
+        <label>Вміст ванадію (мг/кг)</label>
+        <input type="number" id="V_G" step="0.01">
+        <button onclick="calculate()">Розрахувати</button>
+        <h3>Результати:</h3>
+        <p id="result"></p>
+    </div>
+    
+    <script>
+        function calculate() {
+            let C_G = parseFloat(document.getElementById('C_G').value);
+            let H_G = parseFloat(document.getElementById('H_G').value);
+            let O_G = parseFloat(document.getElementById('O_G').value);
+            let S_G = parseFloat(document.getElementById('S_G').value);
+            let Q_daf = parseFloat(document.getElementById('Q_daf').value);
+            let W_P = parseFloat(document.getElementById('W_P').value);
+            let A_P = parseFloat(document.getElementById('A_P').value);
+            let V_G = parseFloat(document.getElementById('V_G').value);
+
+            let factor = (100 - W_P - A_P) / 100;
+            let C_P = (C_G * factor).toFixed(2);
+            let H_P = (H_G * factor).toFixed(2);
+            let O_P = (O_G * factor).toFixed(2);
+            let S_P = (S_G * factor).toFixed(2);
+            let A_P_res = (A_P * (100 - W_P) / 100).toFixed(2);
+            let V_P = (V_G * (100 - W_P) / 100).toFixed(2);
+            let Q_r = (Q_daf * (100 - W_P) / 100).toFixed(2);
+
+            document.getElementById('result').innerHTML = `
+                Вуглець: ${C_P}%<br>
+                Водень: ${H_P}%<br>
+                Кисень: ${O_P}%<br>
+                Сірка: ${S_P}%<br>
+                Зола: ${A_P_res}%<br>
+                Ванадій: ${V_P} мг/кг<br>
+                Нижча теплота згоряння: ${Q_r} МДж/кг
+            `;
+        }
+    </script>
+</body>
+</html>
